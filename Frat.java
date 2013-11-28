@@ -9,12 +9,12 @@ public class Frat {
 	////////// GETTERS + SETTERS //////////
 	public String getName() { return _name; }
 	public void setName(String name) { _name = name; }
-	public boolean isFrat(String fratName) { return (fratName == getName()); }
+	public boolean isFrat(String fratName) { return (fratName.equals(getName())); }
 
 	public int getBudget() { return _budget; }
 	public void setBudget(int budget) { _budget = budget; }
 
-	private Vector<Debt> getDebtList() { return _debtList; }
+	public Vector<Debt> getDebtList() { return _debtList; }
 	private Debt getDebtAtIndex(int i){ 
 		return getDebtList().get(i);
 	}
@@ -88,24 +88,25 @@ public class Frat {
 			System.out.println("Error while changing debt : creditor could not be found.");
 		}
 	}
-	/*
+	
 	 
 	public static void main(String[] args) {
 								///////////////////////////////////////////////////////////////////// REMOVE MAIN
 	
 		Frat f = new Frat("CI", 100);
 		Frat g = new Frat("CP", 200);
-		System.out.println(f.hasDebt(g));
-		f.addDebt(g, 10);
-		System.out.println(f.getDebt(g));
-		f.changeDebt(g, 5);
-		System.out.println(f.getDebt(g));
-		System.out.println(f.hasDebt(g));
+		System.out.println(f.isFrat("CI "));
+		//System.out.println(f.hasDebt(g));
+		//f.addDebt(g, 10);
+		//System.out.println(f.getDebt(g));
+		//f.changeDebt(g, 5);
+		//System.out.println(f.getDebt(g));
+		//System.out.println(f.hasDebt(g));
 
 
 
 	}
-	*/
+	
 }
 
 class Debt {

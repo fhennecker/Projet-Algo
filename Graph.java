@@ -7,18 +7,21 @@ public class Graph {
     
     //////////GETTERS + SETTERS//////////
     
-    public Vector<Frat> getFratList(){return _fratList;}
+    public Vector<Frat> getFratList(){ return _fratList; }
+    public int getLength(){ return _fratList.size(); }
+    public Frat getFrat(int index){ return _fratList.get(index); }
     
     public void setFratList(Vector<Frat> fratList){
         _fratList.clear();
         _fratList = new Vector<Frat>(fratList);
     }
     
+    //////////CONSTRUCTOR//////////
+    
     public Graph(String fileName){
         
         File file = new File(fileName);
         BufferedReader reader = null;
-
         try {
             reader = new BufferedReader(new FileReader(file));
             String text = null;
@@ -47,7 +50,7 @@ public class Graph {
                         }
                     }
                     if (tmp!=null && tmpCreditor!=null){//if both were found, add Debt
-                        System.out.println("adding debt");
+                        //System.out.println("adding debt");
                         tmp.addDebt(tmpCreditor,Integer.decode(splitLine[2]));
                     } else{System.out.println("One of the Fraternitys was not found in a debt");}
                     
@@ -77,23 +80,33 @@ public class Graph {
             System.out.println("File not found");
         } catch (IOException e) {
             System.out.println("Error opening file");
-        }
-        try {
+        }try {
             if (reader != null) {
                 reader.close();
             }
         } catch (IOException e) {
             System.out.println("Error closing file");
         }
-        /*//print _fratList
-        for(int i = 0;i<_fratList.size();i++){
-            System.out.println(_fratList.get(i).getName());
-        }
-        */
+    }
+    
+    public void test(){
+        int len = getLength();
+        for (int i = 0;i<len;i++){
+            Frat tmp = _fratList.get(i);
+            System.out.println(tmp.getName());
+            if (tmp.getDebtList().size()>0){
+                Vector<Debt> Debts = new Vector<Debt>(tmp.getDebtList());
+                for (int j = 0;j<Debts.size();j++){
+                    Debt tmpDebt = Debts.get(j);
+                    System.out.println("Debt to "+tmpDebt.getCreditor().getName()+" of "+tmpDebt.getAmount()+" euros");
+                }
+            }
+        }    
     }
     
     public static void main(String[] argv){
         Graph a = new Graph("test.txt");
+        a.test();
     }
     
     
