@@ -85,12 +85,20 @@ public class Graph {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("graph.dot"), "utf-8"));
             writer.write("digraph G {\n");
             Vector<Debt> debtList;
-            for (int i = 0;i<getLength();i++){
-                String myName = _fratList.get(i).getName();
-                writer.write(myName+" [style=filled, fillcolor = orange]\n");
+            for (int i = 0;i<getLength();i++){//for every node in graph
+                
+                Frat tmp =  _fratList.get(i);
+                String myName = ("\""+tmp.getName()+"\n"+tmp.getBudget()+"\"");
+                //myName == string with name and budget of Frat
+                writer.write(myName+" [style=filled, fillcolor = orange]"+"\n");
+                //create node with orange color and myName as info
                 debtList = new Vector<Debt>(_fratList.get(i).getDebtList());
-                for (int j =0;j<debtList.size();j++){
-                    String debtName = debtList.get(j).getCreditor().getName();
+                
+                for (int j =0;j<debtList.size();j++){//for every debt a Frat has
+                    
+                    Frat tmpCreditor = debtList.get(j).getCreditor();
+                    String debtName = ("\""+tmpCreditor.getName()+"\n"+tmpCreditor.getBudget()+"\"");
+                    //same as myName but for creditor
                     String line = "    "+myName+" -> "+debtName+"[label=\" "+debtList.get(j).getAmount()+"\"];\n";
                     writer.write(line);
                 }                  
