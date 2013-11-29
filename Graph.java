@@ -53,28 +53,7 @@ public class Graph {
                         //System.out.println("adding debt");
                         tmp.addDebt(tmpCreditor,Integer.decode(splitLine[2]));
                     } else{System.out.println("One of the Fraternitys was not found in a debt");}
-                    
-                    //or this code
-                    //
-                    //for (int i=0;i<_fratList.size();i++){//must find debitor
-                    //  tmp = _fratList.get(i);
-                    //  if (tmp.isFrat(splitLine[0])){//if found debitor
-                    //      System.out.println("found Frat");
-                    //      
-                    //      for (int j = 0;j<_fratList.size();j++){//must find creditor
-                    //          tmpCreditor=_fratList.get(j);
-                    //          
-                    //          if (tmpCreditor.isFrat(splitLine[1])){//if found creditor
-                    //              System.out.println("Adding debt");
-                    //              tmp.addDebt(tmpCreditor,Integer.decode(splitLine[2]));
-                    //          }
-                    //          
-                    //      }
-                    //      
-                    //   }
-                    //}
                 }
-                
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
