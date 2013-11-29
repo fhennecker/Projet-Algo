@@ -1,6 +1,12 @@
 import java.util.Vector;
 
 public class Frat {
+	/** Description de la classe .
+	* Coucou
+	* Super coucou
+	* @author Floflo
+	*
+	*/
 
 	private String _name;
 	private int _budget;
@@ -10,6 +16,7 @@ public class Frat {
 	public String getName() { return _name; }
 	public void setName(String name) { _name = name; }
 	public boolean isFrat(String fratName) { return (fratName == getName()); }
+	public boolean isFrat(Frat otherFrat) { return this == otherFrat; }
 
 	public int getBudget() { return _budget; }
 	public void setBudget(int budget) { _budget = budget; }
@@ -88,8 +95,8 @@ public class Frat {
 			System.out.println("Error while changing debt : creditor could not be found.");
 		}
 	}
+	
 	/*
-	 
 	public static void main(String[] args) {
 								///////////////////////////////////////////////////////////////////// REMOVE MAIN
 	
@@ -101,11 +108,13 @@ public class Frat {
 		f.changeDebt(g, 5);
 		System.out.println(f.getDebt(g));
 		System.out.println(f.hasDebt(g));
+		System.out.println(f.isFrat("CI"));
 
 
 
 	}
 	*/
+	
 }
 
 class Debt {
