@@ -69,34 +69,39 @@ public class Graph {
         }
     }
     
-    public void test(){
-        int len = getLength();
-        for (int i = 0;i<len;i++){
-            Frat tmp = _fratList.get(i);
-            System.out.println(tmp.getName());
-            if (tmp.getDebtList().size()>0){
-                Vector<Debt> Debts = new Vector<Debt>(tmp.getDebtList());
-                for (int j = 0;j<Debts.size();j++){
-                    Debt tmpDebt = Debts.get(j);
-                    System.out.println("Debt to "+tmpDebt.getCreditor().getName()+" of "+tmpDebt.getAmount()+" euros");
-                }
-            }
-        }    
-    }
-    
     public static void main(String[] argv){
         Graph a = new Graph("test.txt");
-        a.test();
+        a.graphToImage();
     }
-    
-    
     
     public void detectCycle(){
         
-    }
+    }                                 
     
     public void graphToImage(){
-        
-    }
-    
+        Writer writer = null;
+
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("graph.dot"), "utf-8"));
+            writer.write("digraph G {\n");
+            Vector<Debt> debtList;
+            for (int i = 0;i<getLength();i++){
+                String myName = _fratList.get(i).getName();
+                writer.write(myName+" [style=filled, fillcolor = orange]\n");
+                debtList = new Vector<Debt>(_fratList.get(i).getDebtList());
+                for (int j =0;j<debtList.size();j++){
+                    String debtName = debtList.get(j).getCreditor().getName();
+                    String line = "    "+myName+" -> "+debtName+"[label=\" "+debtList.get(j).getAmount()+"\"];\n";
+                    writer.write(line);
+                }                  
+            }
+        } catch (IOException ex) {
+          System.out.println("Could not create .dot file");
+        } finally {
+            try {
+                writer.write("}");
+                writer.close();
+            } catch (Exception ex) {System.out.println("Could not close .dot file");}
+        }
+    }       
 }
