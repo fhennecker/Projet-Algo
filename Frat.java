@@ -16,6 +16,7 @@ public class Frat {
 	public String getName() { return _name; }
 	public void setName(String name) { _name = name; }
 	public boolean isFrat(String fratName) { return (fratName.equals(getName())); }
+	public boolean isFrat(Frat otherFrat) { return (this == otherFrat); }
 
 	public int getBudget() { return _budget; }
 	public void setBudget(int budget) { _budget = budget; }
