@@ -1,12 +1,6 @@
 import java.util.Vector;
 
 public class Frat {
-	/** Description de la classe .
-	* Coucou
-	* Super coucou
-	* @author Floflo
-	*
-	*/
 
 	private String _name;
 	private int _budget;
