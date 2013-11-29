@@ -4,6 +4,7 @@ import java.util.Vector;
 public class Graph {
     
     private Vector<Frat> _fratList;
+    private Vector<Vector<Frat>> _cycles;
     
     //////////GETTERS + SETTERS//////////
     
