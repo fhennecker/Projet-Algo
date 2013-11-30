@@ -70,13 +70,22 @@ public class Graph {
     }
     
     public static void main(String[] argv){
-        Graph a = new Graph("test.txt");
+        Graph a = new Graph("test2.txt");
+        //a.deleteCycles();
+        a.payBack();
+        //a.indirectDebtReduction();
         a.graphToImage();
     }
     
     public void detectCycle(){
         
-    }                                 
+    }
+    
+    public void payBack(){
+        for (int i = 0;i<getLength();i++){//every frat pays back what it can
+            _fratList.get(i).payBack();
+        }
+    }
     
     public void graphToImage(){
         Writer writer = null;
