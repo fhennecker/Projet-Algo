@@ -82,6 +82,10 @@ public class Frat {
 			System.out.println("Error while deleting debt : creditor could not be found.");
 		}
 	}
+	
+	public void deleteDebt(int index){
+		_debtList.remove(index);
+	}
 
 	public void changeDebt(Frat creditor, int amount){
 		/** changeDebt allows to add an amount to creditor's debt. Positive and
@@ -91,6 +95,30 @@ public class Frat {
 		}
 		catch ( ArrayIndexOutOfBoundsException e ) {
 			System.out.println("Error while changing debt : creditor could not be found.");
+		}
+	}
+	
+	public void payBack(){
+		Vector<Debt> debtList = new Vector<Debt>(_debtList.size());
+		for(int i = 0;i<_debtList.size();i++){//sort debts by amount in debtList variable
+			int j = 0;
+			while (j<debtList.size() && _debtList.get(i).getAmount()>debtList.get(j).getAmount()){
+				j++;
+			}
+			debtList.add(j,_debtList.get(i));
+		}
+		for(int i = 0;i<debtList.size();i++){//payBack maximum of debt starting with cheapest one
+			Debt tmp = debtList.get(i);				//then recall payback on creditor to check if he can't
+			if (_budget>=tmp.getAmount()){    //payback debts with money he was just given
+				setBudget(_budget-tmp.getAmount());
+				tmp.getCreditor().setBudget(tmp.getCreditor().getBudget()+tmp.getAmount());
+				_debtList.remove(tmp);
+			}else{
+				tmp.getCreditor().setBudget(tmp.getCreditor().getBudget()+getBudget());
+				changeDebt(tmp.getCreditor(),-getBudget());
+				setBudget(0);
+			}
+			tmp.getCreditor().payBack();
 		}
 	}
 	

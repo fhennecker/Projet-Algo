@@ -70,22 +70,8 @@ public class Graph {
         _cycles = new Vector<Vector<Frat>>();
     }
     
-    public void test(){
-        int len = getLength();
-        for (int i = 0;i<len;i++){
-            Frat tmp = _fratList.get(i);
-            System.out.println(tmp.getName());
-            if (tmp.getDebtList().size()>0){
-                Vector<Debt> Debts = new Vector<Debt>(tmp.getDebtList());
-                for (int j = 0;j<Debts.size();j++){
-                    Debt tmpDebt = Debts.get(j);
-                    System.out.println("Debt to "+tmpDebt.getCreditor().getName()+" of "+tmpDebt.getAmount()+" euros");
-                }
-            }
-        }    
-    }
-    
     public static void main(String[] argv){
+<<<<<<< HEAD
         Graph a = new Graph("testenonce.txt");
         a.test();
         a.detectCycles();
@@ -132,6 +118,17 @@ public class Graph {
             }
         }
         visited.add(currentFrat);
+=======
+        Graph a = new Graph("test2.txt");
+        //a.deleteCycles();
+        a.payBack();
+        //a.indirectDebtReduction();
+        a.graphToImage();
+    }
+    
+    public void detectCycle(){
+        
+>>>>>>> f4ca8a34d62816194adaf86e2621875427df1c4c
     }
     
     public void payBack(){
