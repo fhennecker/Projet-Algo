@@ -106,20 +106,19 @@ public class Graph {
     }
 
     public void findCycle(Frat currentFrat, Vector<Frat> path, Vector<Frat> visited){
-        for (Debt debt:currentFrat.getDebtList()){
+        for (Debt debt:currentFrat.getDebtList()){ // looking for all creditors
                 if (path.contains(debt.getCreditor())){
                     // found cycle
                     path.add(currentFrat);
                     Vector<Frat> cycle = new Vector<Frat>();
                     int i = 0;
                     while (path.get(i) != debt.getCreditor()){
-                        i++;
-                    }
+                        i++;    // the first frats in the path are not necessarily
+                    }           // in the cycle. we're skipping them here.
                     do{
                         cycle.add(path.get(i));
                         i++;
                     } while (i<path.size());
-                    System.out.println(cycle);
                     _cycles.add(cycle);
                     path.remove(currentFrat);
                 }
