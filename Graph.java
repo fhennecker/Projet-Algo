@@ -86,8 +86,9 @@ public class Graph {
     }
     
     public static void main(String[] argv){
-        Graph a = new Graph("testenonce.txt");
+        Graph a = new Graph("extremecycles.txt");
         a.test();
+        a.graphToImage();
         a.detectCycles();
         System.out.println(a._cycles);
     }
@@ -105,9 +106,7 @@ public class Graph {
     }
 
     public void findCycle(Frat currentFrat, Vector<Frat> path, Vector<Frat> visited){
-        System.out.println("Checking from "+ currentFrat);
         for (Debt debt:currentFrat.getDebtList()){
-            if (! visited.contains(debt.getCreditor())){
                 if (path.contains(debt.getCreditor())){
                     // found cycle
                     path.add(currentFrat);
@@ -129,7 +128,6 @@ public class Graph {
                     findCycle(debt.getCreditor(), path, visited);
                     path.remove(currentFrat);
                 }
-            }
         }
         visited.add(currentFrat);
     }
