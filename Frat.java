@@ -59,6 +59,10 @@ public class Frat {
 		_debtList = new Vector<Debt>();	
 	}
 
+	public String toString() {
+		return getName();
+	}
+
 	////////// WORK METHODS //////////
 	public void addDebt(Frat creditor, int amount){
 		_debtList.add(new Debt(creditor, amount));

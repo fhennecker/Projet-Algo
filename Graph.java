@@ -67,6 +67,7 @@ public class Graph {
         } catch (IOException e) {
             System.out.println("Error closing file");
         }
+        _cycles = new Vector<Vector<Frat>>();
     }
     
     public void test(){
@@ -85,14 +86,52 @@ public class Graph {
     }
     
     public static void main(String[] argv){
-        Graph a = new Graph("test.txt");
+        Graph a = new Graph("testenonce.txt");
         a.test();
+        a.detectCycles();
+        System.out.println(a._cycles);
     }
     
     
     
-    public void detectCycle(){
-        
+    public void detectCycles(){
+        Vector<Frat> visited = new Vector<Frat>();
+        for (Frat frat:getFratList()){
+            if (! visited.contains(frat)){
+                Vector<Frat> path = new Vector<Frat>();
+                findCycle(frat, path, visited);
+            }   
+        }
+    }
+
+    public void findCycle(Frat currentFrat, Vector<Frat> path, Vector<Frat> visited){
+        System.out.println("Checking from "+ currentFrat);
+        for (Debt debt:currentFrat.getDebtList()){
+            if (! visited.contains(debt.getCreditor())){
+                if (path.contains(debt.getCreditor())){
+                    // found cycle
+                    path.add(currentFrat);
+                    Vector<Frat> cycle = new Vector<Frat>();
+                    int i = 0;
+                    while (path.get(i) != debt.getCreditor()){
+                        i++;
+                    }
+                    do{
+                        cycle.add(path.get(i));
+                        i++;
+                    } while (i<path.size());
+                    System.out.println(cycle);
+                    _cycles.add(cycle);
+                    path.remove(currentFrat);
+                }
+                else {
+                    path.add(currentFrat);
+                    findCycle(debt.getCreditor(), path, visited);
+                    path.remove(currentFrat);
+                }
+            }
+        }
+        visited.add(currentFrat);
     }
     
     public void graphToImage(){
