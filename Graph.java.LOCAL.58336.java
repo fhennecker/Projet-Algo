@@ -6,7 +6,7 @@ public class Graph {
     private Vector<Frat> _fratList;
     private Vector<Vector<Frat>> _cycles;
     
-    ////////// GETTERS + SETTERS //////////
+    //////////GETTERS + SETTERS//////////
     
     public Vector<Frat> getFratList(){ return _fratList; }
     public int getLength(){ return _fratList.size(); }
@@ -17,7 +17,7 @@ public class Graph {
         _fratList = new Vector<Frat>(fratList);
     }
     
-    ////////// CONSTRUCTOR //////////
+    //////////CONSTRUCTOR//////////
     
     public Graph(String fileName){
         
@@ -70,8 +70,6 @@ public class Graph {
         _cycles = new Vector<Vector<Frat>>();
     }
     
-    ////////// WORK METHODS //////////
-    
     public void test(){
         int len = getLength();
         for (int i = 0;i<len;i++){
@@ -88,7 +86,7 @@ public class Graph {
     }
     
     public static void main(String[] argv){
-        Graph a = new Graph(argv[0]);
+        Graph a = new Graph("testenonce.txt");
         a.test();
         a.graphToImage("before");
         a.detectCycles();

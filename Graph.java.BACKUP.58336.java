@@ -88,7 +88,11 @@ public class Graph {
     }
     
     public static void main(String[] argv){
+<<<<<<< HEAD
+        Graph a = new Graph("testenonce.txt");
+=======
         Graph a = new Graph(argv[0]);
+>>>>>>> 8adaf12117643988917a7776edbd8635b2f4a65f
         a.test();
         a.graphToImage("before");
         a.detectCycles();
