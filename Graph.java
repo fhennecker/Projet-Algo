@@ -89,15 +89,14 @@ public class Graph {
     
     public static void main(String[] argv){
         Graph a = new Graph(argv[0]);
-        a.test();
-        a.graphToImage("before");
         a.detectCycles();
         a.reduceCycles();
-        a.graphToImage("after");
-        System.out.println(a._cycles);
+        a.graphToImage("debtNoCycles");
+        System.out.println("Le fichier debtNoCycles.dot contient la situation sans cycles.\nUtilisez la commande : <dot Tpng debtNoCycles.dot -o debtNoCylces.png>\npour créer l'image.\n");
+        a.payBack();
+        a.graphToImage("debtRefunded");
+        System.out.println("Le fichier debtNoCycles.dot contient la situation actuelle.\nUtilisez la commande : <dot Tpng debtRefunded.dot -o debtRefunded.png>\npour créer l'image.\n");
     }
-    
-    
     
     public void detectCycles(){
         Vector<Frat> visited = new Vector<Frat>();
@@ -158,9 +157,48 @@ public class Graph {
     }
     
     public void payBack(){
-        for (int i = 0;i<getLength();i++){//every frat pays back what it can
-            _fratList.get(i).payBack();
+        System.out.println("Ordre des remboursements :\n");
+        boolean done = false;//tu check if finished
+        while(done==false){
+            Vector<Frat> start = (Vector<Frat>) _fratList.clone();
+            //get in start Frats who wil not be refunded at the moment
+            Vector<Debt> debtList = new Vector<Debt>();
+            Frat tmp;
+            for (int i = 0;i<getLength();i++){
+                tmp = _fratList.get(i);
+                debtList = tmp.getDebtList();
+                if (tmp.getBudget()>0 && tmp.getDebtList().size()>0){
+                    //but Frats must also have some budget and have at least one debt
+                    for (int j =0;j<debtList.size();j++){
+                        tmp = debtList.get(j).getCreditor();
+                        start.remove(tmp);
+                    }
+                }else{start.remove(_fratList.get(i));}
+            }
+            if(start.size()>0){
+                //if at least one Frat fullfills conditions, we are not done yet
+                for (int k =0;k<start.size();k++){//for every Frat in start
+                    tmp = start.get(k);
+                    debtList = tmp.getDebtList();
+                    for(int i = 0;i<debtList.size();i++){// and for every debt that Frat has
+                        if(tmp.getBudget()>=debtList.get(i).getAmount()){
+                            //if can fully refund
+                            tmp.setBudget(tmp.getBudget()-debtList.get(i).getAmount());
+                            debtList.get(i).getCreditor().setBudget(debtList.get(i).getCreditor().getBudget()+debtList.get(i).getAmount());
+                            System.out.println(tmp.getName()+" ("+debtList.get(i).getAmount()+") -> "+debtList.get(i).getCreditor().getName());
+                            tmp.deleteDebt(debtList.get(i).getCreditor());
+                        }else{
+                            //else refund max possible
+                            debtList.get(i).getCreditor().setBudget(debtList.get(i).getCreditor().getBudget()+tmp.getBudget());
+                            tmp.changeDebt(debtList.get(i).getCreditor(),-tmp.getBudget());
+                            System.out.println(tmp.getName()+" ("+tmp.getBudget()+") -> "+debtList.get(i).getCreditor().getName());
+                            tmp.setBudget(0);
+                        }
+                    }
+                }
+            }else{done=true;}
         }
+        System.out.println();
     }
     
     public void graphToImage(String filename){

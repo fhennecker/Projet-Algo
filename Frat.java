@@ -103,49 +103,6 @@ public class Frat {
 		}
 	}
 	
-	public void payBack(){
-		Vector<Debt> debtList = new Vector<Debt>(_debtList.size());
-		for(int i = 0;i<_debtList.size();i++){//sort debts by amount in debtList variable
-			int j = 0;
-			while (j<debtList.size() && _debtList.get(i).getAmount()>debtList.get(j).getAmount()){
-				j++;
-			}
-			debtList.add(j,_debtList.get(i));
-		}
-		for(int i = 0;i<debtList.size();i++){//payBack maximum of debt starting with cheapest one
-			Debt tmp = debtList.get(i);				//then recall payback on creditor to check if he can't
-			if (_budget>=tmp.getAmount()){    //payback debts with money he was just given
-				setBudget(_budget-tmp.getAmount());
-				tmp.getCreditor().setBudget(tmp.getCreditor().getBudget()+tmp.getAmount());
-				_debtList.remove(tmp);
-			}else{
-				tmp.getCreditor().setBudget(tmp.getCreditor().getBudget()+getBudget());
-				changeDebt(tmp.getCreditor(),-getBudget());
-				setBudget(0);
-			}
-			tmp.getCreditor().payBack();
-		}
-	}
-	
-	/*
-	public static void main(String[] args) {
-								///////////////////////////////////////////////////////////////////// REMOVE MAIN
-	
-		Frat f = new Frat("CI", 100);
-		Frat g = new Frat("CP", 200);
-		System.out.println(f.isFrat("CI "));
-		//System.out.println(f.hasDebt(g));
-		//f.addDebt(g, 10);
-		//System.out.println(f.getDebt(g));
-		//f.changeDebt(g, 5);
-		//System.out.println(f.getDebt(g));
-		//System.out.println(f.hasDebt(g));
-
-
-
-	}
-	*/
-	
 }
 
 class Debt {
