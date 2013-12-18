@@ -73,13 +73,16 @@ public class Graph {
     ////////// WORK METHODS //////////
     
     public static void main(String[] argv){
-        Graph a = new Graph(argv[0]);
-        a.graphToImage("before");
-        a.detectCycles();
-        a.reduceCycles();
-        a.graphToImage("after");
-        a.payBack();
-        a.graphToImage("end");
+        try{
+            Graph a = new Graph(argv[0]);
+            a.graphToImage("before");
+            a.detectCycles();
+            a.reduceCycles();
+            a.graphToImage("after");
+            a.payBack();
+            a.graphToImage("end");
+        } catch (Exception e) {System.out.println("Please enter a correct file name.");}
+        
     }
     
     
@@ -124,7 +127,7 @@ public class Graph {
         int cyclesNumber = _cycles.size();
         for(int cycleID = 0; cycleID<cyclesNumber; cycleID++){
             Vector<Frat> cycle = _cycles.get(cycleID);
-            int amountToReduce = minimumDebt(cycle);
+            int amountToReduce = minimumDebtOf(cycle);
 
             // reducing all debts by amountToReduce
             System.out.println(cycleID+1+") Reduction de "+amountToReduce+" :");
@@ -147,7 +150,7 @@ public class Graph {
         }
     }
 
-    public int minimumDebt(Vector<Frat> cycle){
+    public int minimumDebtOf(Vector<Frat> cycle){
         int res = cycle.get(0).getDebt(cycle.get(1));
         int newDebt = 0;
         for (int i=1; i<cycle.size(); ++i){
@@ -190,12 +193,8 @@ public class Graph {
         for (int i=0; i<cycle.size(); ++i){
             Frat frat = cycle.get(i);
             Frat nextFrat = cycle.get( (i+1)%cycle.size() );
-            System.out.print(frat);
             if (frat.getDebt(nextFrat) != 0){
-                System.out.print(" -"+frat.getDebt(nextFrat)+"-> ");
-            }
-            else{
-                System.out.print(" ");
+                System.out.print(frat+" -"+frat.getDebt(nextFrat)+"-> "+nextFrat+" | ");
             }
         }
         System.out.println();
