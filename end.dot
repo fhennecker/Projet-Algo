@@ -1,0 +1,17 @@
+digraph G {
+"CM
+0" [style=filled, fillcolor = orange]
+    "CM
+0" -> "CP
+200"[label=" 50"];
+"CP
+200" [style=filled, fillcolor = orange]
+"C$
+20" [style=filled, fillcolor = orange]
+"CI
+120" [style=filled, fillcolor = orange]
+"CdS
+110" [style=filled, fillcolor = orange]
+"CePha
+130" [style=filled, fillcolor = orange]
+}

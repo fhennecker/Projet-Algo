@@ -72,29 +72,14 @@ public class Graph {
     
     ////////// WORK METHODS //////////
     
-    public void test(){
-        int len = getLength();
-        for (int i = 0;i<len;i++){
-            Frat tmp = _fratList.get(i);
-            System.out.println(tmp.getName());
-            if (tmp.getDebtList().size()>0){
-                Vector<Debt> Debts = new Vector<Debt>(tmp.getDebtList());
-                for (int j = 0;j<Debts.size();j++){
-                    Debt tmpDebt = Debts.get(j);
-                    System.out.println("Debt to "+tmpDebt.getCreditor().getName()+" of "+tmpDebt.getAmount()+" euros");
-                }
-            }
-        }    
-    }
-    
     public static void main(String[] argv){
         Graph a = new Graph(argv[0]);
-        a.test();
         a.graphToImage("before");
         a.detectCycles();
         a.reduceCycles();
         a.graphToImage("after");
-        System.out.println(a._cycles);
+        a.payBack();
+        a.graphToImage("end");
     }
     
     
@@ -136,25 +121,84 @@ public class Graph {
     }
 
     public void reduceCycles(){
-        for(Vector<Frat> cycle:_cycles){
-            // searching for minimum debt
-            int amountToReduce = cycle.get(0).getDebt(cycle.get(1));
-            int newDebt = 0;
-            for (int i=1; i<cycle.size(); ++i){
-                newDebt = cycle.get(i).getDebt(cycle.get( (i+1)%cycle.size() ));
-                System.out.println("red : " + newDebt +" "+amountToReduce+"\n");
-                if (newDebt < amountToReduce){
-                    amountToReduce = newDebt;
-                }
-            }
+        int cyclesNumber = _cycles.size();
+        for(int cycleID = 0; cycleID<cyclesNumber; cycleID++){
+            Vector<Frat> cycle = _cycles.get(cycleID);
+            int amountToReduce = minimumDebt(cycle);
 
             // reducing all debts by amountToReduce
+            System.out.println(cycleID+1+") Reduction de "+amountToReduce+" :");
             for (int i=0; i<cycle.size(); ++i){
                 Frat frat = cycle.get(i);
                 Frat nextFrat = cycle.get( (i+1)%cycle.size() );
+                System.out.print(frat+" -"+frat.getDebt(nextFrat)+"-> ");
                 frat.changeDebt(nextFrat, -amountToReduce);
+
+                if (frat.getDebt(nextFrat) == 0){
+                    // this link might be in other cycles, we have to delete the
+                    // other cycles containing it
+                    cyclesNumber -= deleteCyclesContaining(frat, nextFrat, cycleID+1);
+                }
+            }
+            System.out.println(cycle.get(0)+" ...");
+            System.out.println("Nouvelle situation : ");
+            printReducedCycle(cycle);
+            System.out.println();
+        }
+    }
+
+    public int minimumDebt(Vector<Frat> cycle){
+        int res = cycle.get(0).getDebt(cycle.get(1));
+        int newDebt = 0;
+        for (int i=1; i<cycle.size(); ++i){
+            newDebt = cycle.get(i).getDebt(cycle.get( (i+1)%cycle.size() ));
+            if (newDebt < res){
+                res = newDebt;
             }
         }
+        return res;
+    }
+
+    public int deleteCyclesContaining(Frat debitor, Frat creditor, int fromID){
+        int cyclesNumber = _cycles.size();
+        int cyclesDeleted = 0;
+        while (fromID<cyclesNumber){
+            boolean toDelete = false;
+            Vector<Frat> nextCycle = _cycles.get(fromID);
+            int j=-1;
+            while (!toDelete && j+1<nextCycle.size()){
+                j++;
+                if (nextCycle.get(j) == debitor){
+                    if (nextCycle.get((j+1)%nextCycle.size()) == creditor){
+                        toDelete = true;
+                    }
+                } 
+            }
+            if (toDelete){
+                _cycles.remove(fromID);
+                cyclesNumber--;
+                cyclesDeleted++;
+            }
+            else{
+                fromID++;
+            }
+        }
+        return cyclesDeleted;
+    }
+
+    public void printReducedCycle(Vector<Frat> cycle){
+        for (int i=0; i<cycle.size(); ++i){
+            Frat frat = cycle.get(i);
+            Frat nextFrat = cycle.get( (i+1)%cycle.size() );
+            System.out.print(frat);
+            if (frat.getDebt(nextFrat) != 0){
+                System.out.print(" -"+frat.getDebt(nextFrat)+"-> ");
+            }
+            else{
+                System.out.print(" ");
+            }
+        }
+        System.out.println();
     }
     
     public void payBack(){
