@@ -78,10 +78,10 @@ public class Graph {
             a.detectCycles();
             a.reduceCycles();
             a.graphToImage("debtNoCycles");
-            System.out.println("Le fichier debtNoCycles.dot contient la situation sans cycles.\nUtilisez la commande : <dot Tpng debtNoCycles.dot -o debtNoCylces.png>\npour créer l'image.\n");
+            System.out.println("Le fichier debtNoCycles.dot contient la situation sans cycles.\nUtilisez la commande : <dot Tpng debtNoCycles.dot -o debtNoCylces.png>\npour creer l'image.\n");
             a.payBack();
             a.graphToImage("debtRefunded");
-            System.out.println("Le fichier debtNoCycles.dot contient la situation actuelle.\nUtilisez la commande : <dot Tpng debtRefunded.dot -o debtRefunded.png>\npour créer l'image.\n");
+            System.out.println("Le fichier debtNoCycles.dot contient la situation actuelle.\nUtilisez la commande : <dot Tpng debtRefunded.dot -o debtRefunded.png>\npour creer l'image.\n");
         } catch (Exception e) {System.out.println("Please enter a correct file name.");}
     }
     
@@ -202,6 +202,7 @@ public class Graph {
         System.out.println("Ordre des remboursements :\n");
         boolean done = false;//tu check if finished
         while(done==false){
+            @SuppressWarnings("unchecked")
             Vector<Frat> start = (Vector<Frat>) _fratList.clone();
             //get in start Frats who wil not be refunded at the moment
             Vector<Debt> debtList = new Vector<Debt>();
@@ -276,5 +277,6 @@ public class Graph {
                 writer.close();
             } catch (Exception ex) {System.out.println("Could not close .dot file");}
         }
-    }       
+    }
+    
 }
