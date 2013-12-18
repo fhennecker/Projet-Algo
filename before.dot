@@ -1,0 +1,35 @@
+digraph G {
+"CM
+250" [style=filled, fillcolor = orange]
+    "CM
+250" -> "CP
+80"[label=" 300"];
+"CP
+80" [style=filled, fillcolor = orange]
+    "CP
+80" -> "CI
+40"[label=" 60"];
+    "CP
+80" -> "C$
+40"[label=" 200"];
+"C$
+40" [style=filled, fillcolor = orange]
+    "C$
+40" -> "CdS
+20"[label=" 220"];
+"CI
+40" [style=filled, fillcolor = orange]
+    "CI
+40" -> "CePha
+150"[label=" 120"];
+"CdS
+20" [style=filled, fillcolor = orange]
+    "CdS
+20" -> "CP
+80"[label=" 130"];
+"CePha
+150" [style=filled, fillcolor = orange]
+    "CePha
+150" -> "CI
+40"[label=" 140"];
+}

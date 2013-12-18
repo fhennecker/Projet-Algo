@@ -40,7 +40,12 @@ public class Frat {
 			while (getDebtAtIndex(i).getCreditor() != creditor){
 				++i;
 			}
-			getDebtAtIndex(i).setAmount(newAmount);
+			if (newAmount != 0){
+				getDebtAtIndex(i).setAmount(newAmount);
+			}
+			else{
+				deleteDebt(creditor);
+			}
 		} 
 		catch (ArrayIndexOutOfBoundsException e){
 			System.out.println("Error while changing debt : creditor could not be found.");
