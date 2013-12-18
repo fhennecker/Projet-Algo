@@ -90,8 +90,10 @@ public class Graph {
     public static void main(String[] argv){
         Graph a = new Graph(argv[0]);
         a.test();
-        a.graphToImage();
+        a.graphToImage("before");
         a.detectCycles();
+        a.reduceCycles();
+        a.graphToImage("after");
         System.out.println(a._cycles);
     }
     
@@ -132,6 +134,28 @@ public class Graph {
         }
         visited.add(currentFrat);
     }
+
+    public void reduceCycles(){
+        for(Vector<Frat> cycle:_cycles){
+            // searching for minimum debt
+            int amountToReduce = cycle.get(0).getDebt(cycle.get(1));
+            int newDebt = 0;
+            for (int i=1; i<cycle.size(); ++i){
+                newDebt = cycle.get(i).getDebt(cycle.get( (i+1)%cycle.size() ));
+                System.out.println("red : " + newDebt +" "+amountToReduce+"\n");
+                if (newDebt < amountToReduce){
+                    amountToReduce = newDebt;
+                }
+            }
+
+            // reducing all debts by amountToReduce
+            for (int i=0; i<cycle.size(); ++i){
+                Frat frat = cycle.get(i);
+                Frat nextFrat = cycle.get( (i+1)%cycle.size() );
+                frat.changeDebt(nextFrat, -amountToReduce);
+            }
+        }
+    }
     
     public void payBack(){
         for (int i = 0;i<getLength();i++){//every frat pays back what it can
@@ -139,11 +163,11 @@ public class Graph {
         }
     }
     
-    public void graphToImage(){
+    public void graphToImage(String filename){
         Writer writer = null;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("graph.dot"), "utf-8"));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+".dot"), "utf-8"));
             writer.write("digraph G {\n");
             Vector<Debt> debtList;
             for (int i = 0;i<getLength();i++){//for every node in graph
