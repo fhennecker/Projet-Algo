@@ -10,7 +10,6 @@ public class Graph {
     
     public Vector<Frat> getFratList(){ return _fratList; }
     public int getLength(){ return _fratList.size(); }
-    public Frat getFrat(int index){ return _fratList.get(index); }
     
     public void setFratList(Vector<Frat> fratList){
         _fratList.clear();
@@ -234,7 +233,7 @@ public class Graph {
                             //else refund max possible
                             debtList.get(i).getCreditor().setBudget(debtList.get(i).getCreditor().getBudget()+tmp.getBudget());
                             tmp.changeDebt(debtList.get(i).getCreditor(),-tmp.getBudget());
-                            System.out.println(tmp.getName()+" ("+tmp.getBudget()+") -> "+debtList.get(i).getCreditor().getName());
+                            System.out.println(tmp.getName()+" ("+tmp.getBudget()+") -> "+debtList.get(i).getCreditor().getName()+" reste "+debtList.get(i).getAmount());
                             tmp.setBudget(0);
                         }
                     }
