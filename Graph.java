@@ -10,6 +10,7 @@ public class Graph {
     
     public Vector<Frat> getFratList(){ return _fratList; }
     public int getLength(){ return _fratList.size(); }
+    public Frat getFrat(int index){ return _fratList.get(index); }
     
     public void setFratList(Vector<Frat> fratList){
         _fratList.clear();
@@ -81,7 +82,7 @@ public class Graph {
             a.payBack();
             a.graphToImage("debtRefunded");
             System.out.println("Le fichier debtNoCycles.dot contient la situation actuelle.\nUtilisez la commande : <dot Tpng debtRefunded.dot -o debtRefunded.png>\npour creer l'image.\n");
-        } catch (Exception e) {System.out.println("Please enter a correct file name.");}
+        } catch (Exception e) {System.out.println("An error has occured");}
     }
     
     public void detectCycles(){
@@ -90,7 +91,7 @@ public class Graph {
             if (! visited.contains(frat)){
                 Vector<Frat> path = new Vector<Frat>();
                 findCycle(frat, path, visited);
-            }   
+            }
         }
     }
 
@@ -102,8 +103,8 @@ public class Graph {
                     Vector<Frat> cycle = new Vector<Frat>();
                     int i = 0;
                     while (path.get(i) != debt.getCreditor()){
-                        i++;    // the first frats in the path are not necessarily
-                    }           // in the cycle. we're skipping them here.
+                        i++; // the first frats in the path are not necessarily
+                    } // in the cycle. we're skipping them here.
                     do{
                         cycle.add(path.get(i));
                         i++;
@@ -172,7 +173,7 @@ public class Graph {
                     if (nextCycle.get((j+1)%nextCycle.size()) == creditor){
                         toDelete = true;
                     }
-                } 
+                }
             }
             if (toDelete){
                 _cycles.remove(fromID);
@@ -205,22 +206,18 @@ public class Graph {
             Vector<Frat> start = (Vector<Frat>) _fratList.clone();
             //get in start Frats who wil not be refunded at the moment
             Vector<Debt> debtList = new Vector<Debt>();
-            Frat tmp;
-            for (int i = 0;i<getLength();i++){
-                tmp = _fratList.get(i);
+            for (Frat tmp:getFratList()){
                 debtList = tmp.getDebtList();
                 if (tmp.getBudget()>0 && tmp.getDebtList().size()>0){
                     //but Frats must also have some budget and have at least one debt
-                    for (int j =0;j<debtList.size();j++){
-                        tmp = debtList.get(j).getCreditor();
-                        start.remove(tmp);
+                    for (Debt tmpDebt:debtList){
+                        start.remove(tmpDebt);
                     }
-                }else{start.remove(_fratList.get(i));}
+                }else{start.remove(tmp);}
             }
             if(start.size()>0){
                 //if at least one Frat fullfills conditions, we are not done yet
-                for (int k =0;k<start.size();k++){//for every Frat in start
-                    tmp = start.get(k);
+                for (Frat tmp:start){//for every Frat in start
                     debtList = tmp.getDebtList();
                     for(int i = 0;i<debtList.size();i++){// and for every debt that Frat has
                         if(tmp.getBudget()>=debtList.get(i).getAmount()){
@@ -250,23 +247,22 @@ public class Graph {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename+".dot"), "utf-8"));
             writer.write("digraph G {\n");
             Vector<Debt> debtList;
-            for (int i = 0;i<getLength();i++){//for every node in graph
+            for (Frat tmp:getFratList()){//for every node in graph
                 
-                Frat tmp =  _fratList.get(i);
                 String myName = ("\""+tmp.getName()+"\n"+tmp.getBudget()+"\"");
                 //myName == string with name and budget of Frat
                 writer.write(myName+" [style=filled, fillcolor = orange]"+"\n");
                 //create node with orange color and myName as info
-                debtList = new Vector<Debt>(_fratList.get(i).getDebtList());
+                debtList = new Vector<Debt>(tmp.getDebtList());
                 
-                for (int j =0;j<debtList.size();j++){//for every debt a Frat has
+                for (Debt tmpDebt:debtList){//for every debt a Frat has
                     
-                    Frat tmpCreditor = debtList.get(j).getCreditor();
+                    Frat tmpCreditor = tmpDebt.getCreditor();
                     String debtName = ("\""+tmpCreditor.getName()+"\n"+tmpCreditor.getBudget()+"\"");
                     //same as myName but for creditor
-                    String line = "    "+myName+" -> "+debtName+"[label=\" "+debtList.get(j).getAmount()+"\"];\n";
+                    String line = " "+myName+" -> "+debtName+"[label=\" "+tmpDebt.getAmount()+"\"];\n";
                     writer.write(line);
-                }                  
+                }
             }
         } catch (IOException ex) {
           System.out.println("Could not create .dot file");
